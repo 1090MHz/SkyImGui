@@ -1,0 +1,27 @@
+/public/
+/resources/_gen/
+/.hugo_build.lock
+.DS_Store
+*.swp
+*.swo
+*~
+.vscode/
+node_modules/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+.env
+
+# Backup files
+*.backup
+*.bak
+*.tmp
+
+# Local Netlify folder
+.netlify

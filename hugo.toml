@@ -1,0 +1,13 @@
+baseURL = 'https://imgui-theme-studio.netlify.app/'
+languageCode = 'en-us'
+title = 'ImGui Theme Studio'
+theme = 'imgui-studio'
+
+[params]
+  description = 'Interactive ImGui theme visualizer and generator'
+  author = 'ImGui Theme Studio'
+
+[markup]
+  [markup.goldmark]
+    [markup.goldmark.renderer]
+      unsafe = true

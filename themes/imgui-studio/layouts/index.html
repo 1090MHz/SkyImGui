@@ -1,0 +1,259 @@
+{{ define "main" }}
+<div class="container">
+    <header class="header">
+        <h1>🎨 ImGui Theme Studio</h1>
+        <p>Interactive theme visualizer and generator for Dear ImGui</p>
+        <nav class="header-nav">
+            <a href="/airlines/" class="nav-link">✈️ View All Airline Themes</a>
+        </nav>
+    </header>
+
+    <div class="main-layout">
+        <!-- Theme Controls -->
+        <aside class="controls-panel">
+            <div class="panel-section">
+                <h2>Theme Generator</h2>
+                
+                <div class="input-group">
+                    <label>Color Mode:</label>
+                    <div style="display: flex; gap: 15px; margin-top: 5px;">
+                        <label><input type="radio" name="colorMode" value="1" checked> 1-Color</label>
+                        <label><input type="radio" name="colorMode" value="2"> 2-Color</label>
+                        <label><input type="radio" name="colorMode" value="3"> 3-Color</label>
+                        <label><input type="radio" name="colorMode" value="4"> 4-Color</label>
+                    </div>
+                </div>
+                
+                <div class="input-group">
+                    <label for="primaryColor">Primary Color (Title Bars + Frames)</label>
+                    <div style="display: flex; gap: 8px; align-items: center;">
+                        <input type="color" id="primaryColor" value="#4296f9">
+                        <input type="text" id="primaryColorHex" value="#4296F9" pattern="^#[0-9A-Fa-f]{6}$" style="width: 80px; font-family: monospace; text-transform: uppercase;">
+                    </div>
+                </div>
+
+                <div class="input-group" id="secondaryColorGroup" style="display: none;">
+                    <label for="secondaryColor">Secondary Color (Buttons)</label>
+                    <div style="display: flex; gap: 8px; align-items: center;">
+                        <input type="color" id="secondaryColor" value="#ff6600">
+                        <input type="text" id="secondaryColorHex" value="#ff6600" pattern="^#[0-9A-Fa-f]{6}$" style="width: 80px; font-family: monospace; text-transform: uppercase;">
+                    </div>
+                </div>
+                
+                <div class="input-group" id="tertiaryColorGroup" style="display: none;">
+                    <label for="tertiaryColor">Tertiary Color (Headers)</label>
+                    <div style="display: flex; gap: 8px; align-items: center;">
+                        <input type="color" id="tertiaryColor" value="#9933ff">
+                        <input type="text" id="tertiaryColorHex" value="#9933ff" pattern="^#[0-9A-Fa-f]{6}$" style="width: 80px; font-family: monospace; text-transform: uppercase;">
+                    </div>
+                </div>
+                
+                <div class="input-group" id="quaternaryColorGroup" style="display: none;">
+                    <label for="quaternaryColor">Quaternary Color (Tabs)</label>
+                    <div style="display: flex; gap: 8px; align-items: center;">
+                        <input type="color" id="quaternaryColor" value="#ff9900">
+                        <input type="text" id="quaternaryColorHex" value="#ff9900" pattern="^#[0-9A-Fa-f]{6}$" style="width: 80px; font-family: monospace; text-transform: uppercase;">
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <label for="bgColor">Background Color</label>
+                    <div style="display: flex; gap: 8px; align-items: center;">
+                        <input type="color" id="bgColor" value="#0f0f0f">
+                        <input type="text" id="bgColorHex" value="#0F0F0F" pattern="^#[0-9A-Fa-f]{6}$" style="width: 80px; font-family: monospace; text-transform: uppercase;">
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <label for="tableColor">Table Row Color</label>
+                    <div style="display: flex; gap: 8px; align-items: center;">
+                        <input type="color" id="tableColor" value="#3a3a3a">
+                        <input type="text" id="tableColorHex" value="#3A3A3A" pattern="^#[0-9A-Fa-f]{6}$" style="width: 80px; font-family: monospace; text-transform: uppercase;">
+                    </div>
+                </div>
+
+                <div class="input-group" id="accentColorGroup">
+                    <label for="accentColor">Accent Color (Plots)</label>
+                    <div style="display: flex; gap: 8px; align-items: center;">
+                        <input type="color" id="accentColor" value="#f96854">
+                        <input type="text" id="accentColorHex" value="#F96854" pattern="^#[0-9A-Fa-f]{6}$" style="width: 80px; font-family: monospace; text-transform: uppercase;">
+                    </div>
+                </div>
+
+                <button id="generateTheme" class="btn btn-primary">Generate Theme</button>
+                <button id="resetTheme" class="btn btn-secondary">Reset to Dark</button>
+            </div>
+
+            <div class="panel-section">
+                <h3>Airline Brand Colors</h3>
+                <select id="airlinePreset" class="select-preset">
+                    <option value="">-- Select Airline --</option>
+                </select>
+                <div id="airlineColorSwatches" class="airline-color-swatches"></div>
+            </div>
+
+            <div class="panel-section">
+                <h3>Presets</h3>
+                <select id="themePreset" class="select-preset">
+                    <option value="dark">Dark (Default)</option>
+                    <option value="classic">Classic</option>
+                    <option value="light">Light</option>
+                    <option value="nord">Nord</option>
+                    <option value="gruvbox">Gruvbox</option>
+                </select>
+            </div>
+
+            <div class="panel-section">
+                <h3>Export</h3>
+                <button id="exportJson" class="btn">📥 Export JSON</button>
+                <button id="exportCpp" class="btn">📥 Export C++</button>
+                <button id="copyJson" class="btn">📋 Copy JSON</button>
+            </div>
+
+            <div class="panel-section">
+                <h3>Import</h3>
+                <input type="file" id="importFile" accept=".json" style="display: none;">
+                <button id="importBtn" class="btn">📤 Import JSON</button>
+            </div>
+        </aside>
+
+        <!-- Preview Area -->
+        <main class="preview-panel">
+            <h2>Live Preview</h2>
+            <div id="imguiPreview" class="imgui-preview">
+                <!-- Window 1: Buttons and Inputs -->
+                <div class="imgui-window" data-title="Components">
+                    <div class="imgui-titlebar">
+                        <span class="imgui-title">Components</span>
+                        <div class="imgui-window-controls">
+                            <span class="imgui-collapse">_</span>
+                            <span class="imgui-close">×</span>
+                        </div>
+                    </div>
+                    <div class="imgui-window-content">
+                        <button class="imgui-button">Regular Button</button>
+                        <button class="imgui-button imgui-button-small">Small Button</button>
+                        
+                        <div class="imgui-separator"></div>
+                        
+                        <div class="imgui-checkbox">
+                            <input type="checkbox" id="check1" checked>
+                            <label for="check1">Checkbox Option</label>
+                        </div>
+                        
+                        <div class="imgui-input">
+                            <label>Text Input</label>
+                            <input type="text" placeholder="Enter text...">
+                        </div>
+
+                        <div class="imgui-slider">
+                            <label>Slider</label>
+                            <input type="range" min="0" max="100" value="50">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Window 2: Menu and Headers -->
+                <div class="imgui-window" data-title="Menu & Headers">
+                    <div class="imgui-titlebar">
+                        <span class="imgui-title">Menu & Headers</span>
+                    </div>
+                    <div class="imgui-menubar">
+                        <span class="imgui-menu-item">File</span>
+                        <span class="imgui-menu-item">Edit</span>
+                        <span class="imgui-menu-item">View</span>
+                    </div>
+                    <div class="imgui-window-content">
+                        <div class="imgui-header">
+                            <span class="imgui-header-arrow">▼</span>
+                            <span>Expanded Header</span>
+                        </div>
+                        <div class="imgui-header-content">
+                            <p>Content under header</p>
+                        </div>
+
+                        <div class="imgui-header collapsed">
+                            <span class="imgui-header-arrow">▶</span>
+                            <span>Collapsed Header</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Window 3: Tables and Lists -->
+                <div class="imgui-window" data-title="Tables">
+                    <div class="imgui-titlebar">
+                        <span class="imgui-title">Tables</span>
+                    </div>
+                    <div class="imgui-window-content">
+                        <table class="imgui-table">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Value</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Item 1</td>
+                                    <td>100</td>
+                                    <td>✓</td>
+                                </tr>
+                                <tr class="alt">
+                                    <td>Item 2</td>
+                                    <td>200</td>
+                                    <td>✓</td>
+                                </tr>
+                                <tr>
+                                    <td>Item 3</td>
+                                    <td>300</td>
+                                    <td>×</td>
+                                </tr>
+                                <tr class="alt">
+                                    <td>Item 4</td>
+                                    <td>400</td>
+                                    <td>✓</td>
+                                </tr>
+                                <tr>
+                                    <td>Item 5</td>
+                                    <td>500</td>
+                                    <td>✓</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Tabs Example -->
+                <div class="imgui-window" data-title="Tabs">
+                    <div class="imgui-titlebar">
+                        <span class="imgui-title">Tabs Example</span>
+                    </div>
+                    <div class="imgui-tabs">
+                        <div class="imgui-tab active">Tab 1</div>
+                        <div class="imgui-tab">Tab 2</div>
+                        <div class="imgui-tab">Tab 3</div>
+                    </div>
+                    <div class="imgui-window-content">
+                        <p>Active tab content goes here</p>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Color Details Panel -->
+    <section class="color-details">
+        <h3>Current Theme Colors</h3>
+        <div id="colorGrid" class="color-grid"></div>
+    </section>
+</div>
+{{ end }}
+
+{{ define "scripts" }}
+<script src="{{ "js/themes.js" | relURL }}?v=4"></script>
+<script src="{{ "js/theme-generator.js" | relURL }}?v=1"></script>
+<script src="{{ "js/theme-visualizer.js" | relURL }}?v=1"></script>
+<script src="{{ "js/airline-colors.js" | relURL }}?v=1"></script>
+<script src="{{ "js/app.js" | relURL }}?v=15"></script>
+{{ end }}
