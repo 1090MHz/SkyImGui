@@ -1,5 +1,7 @@
 # SkyImGui
 
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+
 SkyImGui is an interactive theme visualizer and generator for Dear ImGui, with a collection of themes inspired by airline brand colors.
 
 [Open SkyImGui](https://skyimgui.netlify.app/)
