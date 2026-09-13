@@ -28,6 +28,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const tertiaryColorGroup = document.getElementById('tertiaryColorGroup');
     const quaternaryColorGroup = document.getElementById('quaternaryColorGroup');
     const accentColorGroup = document.getElementById('accentColorGroup');
+    const pendingThemeJson = sessionStorage.getItem('applyTheme');
+    const pendingAirlineTheme = pendingThemeJson ? JSON.parse(pendingThemeJson) : null;
 
     // Sync color picker with hex input
     function syncColorToHex(colorInput, hexInput) {
@@ -123,9 +125,8 @@ document.addEventListener('DOMContentLoaded', () => {
             console.log('Dropdown populated with', airlines.length, 'airlines');
             
             // Check if we need to apply an airline theme from sessionStorage (after dropdown is populated)
-            const applyTheme = sessionStorage.getItem('applyTheme');
-            if (applyTheme) {
-                const theme = JSON.parse(applyTheme);
+            if (pendingAirlineTheme) {
+                const theme = pendingAirlineTheme;
                 sessionStorage.removeItem('applyTheme');
                 
                 console.log('Applying airline theme:', theme);
@@ -175,8 +176,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     }
                 }
                 
-                // Trigger theme generation
-                setTimeout(() => generateCustomTheme(), 150);
+                generateCustomTheme();
             }
         })
         .catch(err => console.error('Failed to load airline colors:', err));
@@ -343,8 +343,27 @@ document.addEventListener('DOMContentLoaded', () => {
         accent: !!accentColorInput
     });
 
-    // Initialize with canonical ImGui Dark theme preset
-    visualizer.applyTheme(THEME_PRESETS.dark);
+    if (pendingAirlineTheme) {
+        const secondary = pendingAirlineTheme.secondaryColor || pendingAirlineTheme.accentColor;
+        const tertiary = pendingAirlineTheme.tertiaryColor !== secondary
+            ? pendingAirlineTheme.tertiaryColor
+            : null;
+        const quaternary = tertiary && pendingAirlineTheme.quaternaryColor !== tertiary
+            ? pendingAirlineTheme.quaternaryColor
+            : null;
+        const theme = generator.generateTheme(
+            pendingAirlineTheme.primaryColor,
+            bgColorInput.value,
+            pendingAirlineTheme.primaryColor,
+            secondary,
+            tertiary,
+            quaternary,
+            tableColorInput.value
+        );
+        visualizer.applyTheme(theme);
+    } else {
+        visualizer.applyTheme(THEME_PRESETS.dark);
+    }
 
     // Generate button
     generateBtn.addEventListener('click', generateCustomTheme);

@@ -134,7 +134,7 @@ class ThemeVisualizer {
         // Create header
         const heading = document.createElement('h4');
         heading.className = 'category-heading';
-        heading.textContent = `Current Theme Colors (sorted by Hue → Saturation → Value)`;
+        heading.textContent = `Current Theme Colors`;
         grid.appendChild(heading);
 
         // Create grid container
