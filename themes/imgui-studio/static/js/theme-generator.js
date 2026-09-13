@@ -222,7 +222,6 @@ class ThemeGenerator {
         // ====================================================================
         // GRAYSCALE LADDER (from title anchor for UI chrome)
         // ====================================================================
-        const gray55 = this.pctOfAnchor(titleAnchor, 55);   // MenuBarBg
         const gray73 = this.pctOfAnchor(titleAnchor, 73);   // TableHeaderBg
         const gray90 = this.pctOfAnchor(titleAnchor, 90);   // TableBorderLight
         const gray120 = this.pctOfAnchor(titleAnchor, 120); // ScrollbarGrab
@@ -275,8 +274,8 @@ class ThemeGenerator {
                 TitleBgActive: [...titleFrameBg, this.mult5(255)],  // Same as FrameBg - 50% of primary accent (focused window)
                 TitleBgCollapsed: [...this.scaleVector(titleAccent, 5), this.pctOf255(51)],  // 5% of primary accent, translucent
                 
-                // Menu bar (grayscale ladder)
-                MenuBarBg: [gray55, gray55, gray55, this.mult5(255)],
+                // Menu bar (darkened primary accent)
+                MenuBarBg: [...this.scaleVector(titleAccent, 35), this.mult5(255)],
                 
                 // Scrollbar (grayscale ladder)
                 ScrollbarBg: [this.mult5(5), this.mult5(5), this.mult5(5), this.pctOf255(53)],
