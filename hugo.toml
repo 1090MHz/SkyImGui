@@ -1,4 +1,4 @@
-baseURL = 'https://imgui-theme-studio.netlify.app/'
+baseURL = 'https://skyimgui.netlify.app/'
 languageCode = 'en-us'
 title = 'ImGui Theme Studio'
 theme = 'imgui-studio'
