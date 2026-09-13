@@ -1,4 +1,4 @@
 ---
-title: "ImGui Theme Studio"
+title: "SkyImGui"
 layout: "home"
 ---

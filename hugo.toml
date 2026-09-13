@@ -8,8 +8,8 @@ disableKinds = ['taxonomy', 'term']
   home = ['HTML']
 
 [params]
-  description = 'Interactive ImGui theme visualizer and generator'
-  author = 'ImGui Theme Studio'
+  description = 'Interactive ImGui theme visualizer and generator inspired by airline brand colors'
+  author = 'SkyImGui'
 
 [markup]
   [markup.goldmark]
